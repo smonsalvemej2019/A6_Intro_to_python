@@ -15,7 +15,7 @@ import math
 import matplotlib.pyplot as plt
 
 
-# store the summary statistics for each species in a nested dictionary
+# store the summary statistics for each attribute for each species in a nested dictionary
 iris_summary = {
     "setosa" : {
         # "attribute_name" = [min, max, mean, stdev]
@@ -35,31 +35,36 @@ iris_summary = {
 }
 
 
+# calculate the mean
 def calculate_avg(attribute_list):
     return sum(attribute_list)/len(attribute_list) # sum / (# of flowers)
 
 
+# calculate standard deviation using the mean
 def calculate_stdev(attribute_list, mean):
     var = sum((x - mean) ** 2 for x in attribute_list) / len(attribute_list) # calculate variance
     std_dev = math.sqrt(var)
     return std_dev
 
 
+# gets the summary statistics for each of the four attributes for each species
+# summary statistics include minimum, maximum, mean, and standard deviation
 def summarystats(species_name, species):
     # print("species ", species)
 
+    # for every attribute of a species, calculate summary stats
     for attribute in species:
         # print("attribute ", attribute)
         mini = min(species[attribute])
         maxi = max(species[attribute])
         avg = calculate_avg(species[attribute])
         stdev = calculate_stdev(species[attribute], avg)
-        iris_summary[species_name][attribute] = [mini, maxi, avg, stdev]
+        iris_summary[species_name][attribute] = [mini, maxi, avg, stdev] # store stats in the iris_summary nested dict
 
     print_summarystats(species_name, iris_summary[species_name])
 
 
-# print 4x4 tables 
+# print 4x4 table containing the summary statistics for each attribute for one species 
 def print_summarystats(species_name, species_summ):
     print()
     print("Summary statistics for ", species_name)
@@ -68,22 +73,24 @@ def print_summarystats(species_name, species_summ):
     print('{:19s}{:16s}{:15s}{:15s}{:16s}'.format("Attributes(cm)", "Sepal Length", "Sepal Width", "Petal Length", "Petal Width"))
     print("-"*85)
 
-    labels = ["Min", "Max", "Mean", "St Dev"]
-    for index in range(len(labels)):
-        row = '{:12s}'.format(labels[index])
-        for attribute in species_summ:
-            row += '{:15.3f}'.format(species_summ[attribute][index])
+    labels = ["Min", "Max", "Mean", "St Dev"] # left-most column. labels = statistics that were calculated
+    for index in range(len(labels)): # for every item in labels
+        row = '{:12s}'.format(labels[index]) # get the appropriate statistic label
+        for attribute in species_summ: # for every attribute of the species
+            row += '{:15.3f}'.format(species_summ[attribute][index]) # get the appropriate statistic value
         print(row)
     print()
 
+
+# print the sepal width vs sepal length and the petal width vs petal length scatter plots 
 def print_scatterplots(iris):
     # scatter plot for sepal width vs sepal length
     ax = plt.subplot()
-    color = ['blue', 'orange', 'green']
-    index = 0
-    for species in iris:
-        x = iris[species]["sepal_length"]
-        y = iris[species]["sepal_width"]
+    color = ['blue', 'orange', 'green'] # used to set the color of the markers
+    index = 0 # this will be used to traverse through the color list
+    for species in iris: # for every species
+        x = iris[species]["sepal_length"] # get the sepal lengths for the x-axis
+        y = iris[species]["sepal_width"] # get the sepal widths for the y-axis
         ax.scatter(x, y, c=color[index], label=species)
         index += 1
     
@@ -96,11 +103,11 @@ def print_scatterplots(iris):
 
     # scatter plot for petal width vs petal length
     ax = plt.subplot()
-    color = ['purple', 'pink', 'green']
-    index = 0
-    for species in iris:
-        x = iris[species]["petal_length"]
-        y = iris[species]["petal_width"]
+    color = ['purple', 'pink', 'green'] # used to set the color of the markers
+    index = 0 # this will be used to traverse through the color list
+    for species in iris: # for every species
+        x = iris[species]["petal_length"] # get the petal lengths for the x-axis
+        y = iris[species]["petal_width"] # get the petal widths for the y-axis
         ax.scatter(x, y, c=color[index], label=species)
         index += 1
     
@@ -115,7 +122,7 @@ def print_scatterplots(iris):
 ###############################################################################################
 ######################################## MAIN FUNCTION ########################################
 fields = []
-# store information regarding the four attributes for each species in a nested dictionary
+# store the data for the four attributes for each species in a nested dictionary
 iris = {
     "setosa" : {
         "sepal_length": [], "sepal_width": [],
@@ -157,6 +164,6 @@ with open("iris.csv", 'r') as csvfile:
     summarystats("versicolor", iris["versicolor"])
     summarystats("virginica", iris["virginica"])
 
-    scatterplots(iris)
+    print_scatterplots(iris)
 
 
