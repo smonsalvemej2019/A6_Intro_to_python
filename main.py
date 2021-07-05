@@ -12,6 +12,7 @@
 ###########################################################################
 import csv
 import math
+import matplotlib.pyplot as plt
 
 
 # store the summary statistics for each species in a nested dictionary
@@ -55,11 +56,11 @@ def summarystats(species_name, species):
         stdev = calculate_stdev(species[attribute], avg)
         iris_summary[species_name][attribute] = [mini, maxi, avg, stdev]
 
-    summarystats_table(species_name, iris_summary[species_name])
+    print_summarystats(species_name, iris_summary[species_name])
 
 
 # print 4x4 tables 
-def summarystats_table(species_name, species_summ):
+def print_summarystats(species_name, species_summ):
     print()
     print("Summary statistics for ", species_name)
     # table header
@@ -74,6 +75,41 @@ def summarystats_table(species_name, species_summ):
             row += '{:15.3f}'.format(species_summ[attribute][index])
         print(row)
     print()
+
+def print_scatterplots(iris):
+    # scatter plot for sepal width vs sepal length
+    ax = plt.subplot()
+    color = ['blue', 'orange', 'green']
+    index = 0
+    for species in iris:
+        x = iris[species]["sepal_length"]
+        y = iris[species]["sepal_width"]
+        ax.scatter(x, y, c=color[index], label=species)
+        index += 1
+    
+    ax.legend(title = "Species")
+    ax.grid()
+    plt.title("Sepal Length vs Width")
+    plt.xlabel("Sepal Length")
+    plt.ylabel("Sepal Width")
+    plt.show()
+
+    # scatter plot for petal width vs petal length
+    ax = plt.subplot()
+    color = ['purple', 'pink', 'green']
+    index = 0
+    for species in iris:
+        x = iris[species]["petal_length"]
+        y = iris[species]["petal_width"]
+        ax.scatter(x, y, c=color[index], label=species)
+        index += 1
+    
+    ax.legend(title = "Species")
+    ax.grid()
+    plt.title("Petal Length vs Width")
+    plt.xlabel("Petal Length")
+    plt.ylabel("Petal Width")
+    plt.show()
 
 
 ###############################################################################################
@@ -120,5 +156,7 @@ with open("iris.csv", 'r') as csvfile:
     summarystats("setosa", iris["setosa"])
     summarystats("versicolor", iris["versicolor"])
     summarystats("virginica", iris["virginica"])
+
+    scatterplots(iris)
 
 
