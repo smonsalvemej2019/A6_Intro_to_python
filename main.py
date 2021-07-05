@@ -13,6 +13,7 @@
 import csv
 import math
 
+
 # store the summary statistics for each species in a nested dictionary
 iris_summary = {
     "setosa" : {
@@ -46,7 +47,7 @@ def calculate_stdev(attribute_list, mean):
 def summarystats(species_name, species):
     # print("species ", species)
 
-    for attribute in species.keys():
+    for attribute in species:
         # print("attribute ", attribute)
         mini = min(species[attribute])
         maxi = max(species[attribute])
@@ -54,12 +55,26 @@ def summarystats(species_name, species):
         stdev = calculate_stdev(species[attribute], avg)
         iris_summary[species_name][attribute] = [mini, maxi, avg, stdev]
 
-    print(iris_summary[species_name])
+    summarystats_table(species_name, iris_summary[species_name])
 
-def summarystats_table():
-    # print 3 4x4 tables (3 because 1 for each species)
-    return 0
-    
+
+# print 4x4 tables 
+def summarystats_table(species_name, species_summ):
+    print()
+    print("Summary statistics for ", species_name)
+    # table header
+    print("-"*85)
+    print('{:19s}{:16s}{:15s}{:15s}{:16s}'.format("Attributes(cm)", "Sepal Length", "Sepal Width", "Petal Length", "Petal Width"))
+    print("-"*85)
+
+    labels = ["Min", "Max", "Mean", "St Dev"]
+    for index in range(len(labels)):
+        row = '{:12s}'.format(labels[index])
+        for attribute in species_summ:
+            row += '{:15.3f}'.format(species_summ[attribute][index])
+        print(row)
+    print()
+
 
 ###############################################################################################
 ######################################## MAIN FUNCTION ########################################
@@ -91,7 +106,19 @@ with open("iris.csv", 'r') as csvfile:
             iris["setosa"]["sepal_width"].append(float(row[1])) # get data from second col (sepal_width)
             iris["setosa"]["petal_length"].append(float(row[2])) # get data from third col (petal_length)
             iris["setosa"]["petal_width"].append(float(row[3])) # get data from fourth col (petal_width)
+        elif row[4] == "versicolor":
+            iris["versicolor"]["sepal_length"].append(float(row[0]))
+            iris["versicolor"]["sepal_width"].append(float(row[1])) 
+            iris["versicolor"]["petal_length"].append(float(row[2]))
+            iris["versicolor"]["petal_width"].append(float(row[3])) 
+        else:
+            iris["virginica"]["sepal_length"].append(float(row[0])) 
+            iris["virginica"]["sepal_width"].append(float(row[1]))
+            iris["virginica"]["petal_length"].append(float(row[2])) 
+            iris["virginica"]["petal_width"].append(float(row[3])) 
 
     summarystats("setosa", iris["setosa"])
+    summarystats("versicolor", iris["versicolor"])
+    summarystats("virginica", iris["virginica"])
 
 
