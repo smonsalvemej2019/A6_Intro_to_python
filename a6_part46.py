@@ -25,6 +25,7 @@ def open_csv_file():
              data.append(row) ## Collect all data rows
       
       normalization(data) ## Call the normalization function
+      decision_tree(data)
        
      
 def normalization(data):
@@ -65,6 +66,44 @@ def normalization(data):
     print(
         f'{"Max: ":<20} {max(normalize_sepal_length):>10.4f} {max(normalize_sepal_width):>20.4f}'
         f'{max(normalize_petal_length):>20.4f} {max(normalize_petal_width):>20.5f}')
+
+def decision_tree(data):
+    ## Create two empty list
+    datalist1 = []
+    datalist2 = []
+
+    setosa = 0
+    versicolor = 0 
+    virginica = 0
+
+    for row in data:
+        datalist1.append(float(row[2]))
+        datalist2.append(float(row[3]))
+
+    for i in range(len(data)):
+        petal_length = datalist1[i]
+        petal_width = datalist2[i]
+
+        if 0.5 < petal_length < 2.5 :
+            setosa = setosa + 1
+        
+        else:
+            if 2.5 < petal_length < 5.2:
+                if 0.8 < petal_width < 2.4:
+                    versicolor = versicolor + 1
+            elif 4.6 < petal_length < 7.0:
+                if 1.6 < petal_width < 2.7:
+                    virginica = virginica + 1
+    
+    sum = setosa + versicolor + virginica
+    setosa_percentage = (setosa / sum) * 100
+    versicolor_percentage = (versicolor / sum) * 100
+    virginica_percentage = (virginica / sum) * 100
+    print(100 * "-")
+    print(40 * "-","Decision Tree", 40 * "-")
+    print("setosa = ", setosa, ", percentage:", round(setosa_percentage, 2),"%")
+    print("versicolor = ", versicolor, ", percentage:", round(versicolor_percentage, 2),"%")
+    print("virginica = ", virginica, ", percentage:", round(virginica_percentage, 2),"%")
 
 
 open_csv_file()
